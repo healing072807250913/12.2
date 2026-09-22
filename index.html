@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7ec8f7">
+<title>祝你生日快乐 🎂 | To 董佳乐</title>
+<!--
+  ══════════════════════════════════════════════
+  🎂 给董佳乐的 19 岁生日惊喜网页
+  制作：胡博杨
+  ─────────────────────────────────
+  使用方法（HBuilder X）：
+  1. 打开 HBuilder X → 文件 → 新建 → 项目 → 选"普通项目(空项目)"
+  2. 把本文件命名为 index.html 放进项目里
+  3. 右键 index.html → 运行 → 运行到浏览器，就能看到效果啦
+  4. 想改文字：直接在代码里搜索中文修改即可
+  ══════════════════════════════════════════════
+-->
+<style>
+  /* ========== 全局变量：想换配色改这里就行 ========== */
+  :root{
+    --sky-top:#6fc3f7;      /* 天空蓝(顶部) */
+    --sky-mid:#a8ddf9;      /* 天空蓝(中部) */
+    --sky-bottom:#fff6df;   /* 奶油黄(底部) */
+    --sun:#ffd94a;          /* 太阳黄 */
+    --orange:#ff9f43;       /* 活力橙 */
+    --pink:#ff7ea8;         /* 樱花粉 */
+    --blue:#3f9df0;         /* 晴空蓝 */
+    --green:#7ed6a5;        /* 薄荷绿 */
+    --ink:#4a3b28;          /* 文字深棕 */
+    --card:rgba(255,255,255,.72); /* 卡片底色 */
+    --radius:26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{width:100%}
+  body{
+    min-height:100vh;
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-mid) 42%,var(--sky-bottom) 100%) fixed;
+    overflow-x:hidden;
+    display:flex;flex-direction:column;align-items:center;
+  }
+
+  /* ========== 顶部滚动横幅（像贴纸一样的斜胶带） ========== */
+  .tape{
+    position:relative;z-index:20;
+    width:104%;margin-top:14px;
+    transform:rotate(-1.6deg);
+    background:linear-gradient(90deg,var(--orange),#ffb84d);
+    color:#fff;font-weight:700;font-size:12px;letter-spacing:2px;
+    padding:8px 0;box-shadow:0 4px 14px rgba(255,159,67,.35);
+    overflow:hidden;white-space:nowrap;
+  }
+  .tape-track{display:inline-block;animation:tapeMove 22s linear infinite}
+  @keyframes tapeMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ========== 太阳（光芒缓缓旋转） ========== */
+  .sun{
+    position:fixed;top:-70px;right:-70px;width:230px;height:230px;z-index:1;
+    pointer-events:none;animation:sunSpin 40s linear infinite;opacity:.9;
+  }
+  .sun::before{ /* 光芒：重复锥形渐变 */
+    content:"";position:absolute;inset:0;border-radius:50%;
+    background:repeating-conic-gradient(rgba(255,217,74,.55) 0deg 9deg,transparent 9deg 18deg);
+    -webkit-mask:radial-gradient(circle,transparent 52%,#000 53%,#000 100%);
+            mask:radial-gradient(circle,transparent 52%,#000 53%,#000 100%);
+  }
+  .sun::after{ /* 太阳本体 */
+    content:"";position:absolute;inset:52px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#ffe98a,var(--sun) 70%);
+    box-shadow:0 0 60px 18px rgba(255,217,74,.55);
+    animation:sunBreath 5s ease-in-out infinite;
+  }
+  @keyframes sunSpin{to{transform:rotate(360deg)}}
+  @keyframes sunBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  /* ========== 云朵（慢慢飘） ========== */
+  .cloud{position:fixed;z-index:1;pointer-events:none;opacity:.85;animation:drift linear infinite}
+  .cloud .puff{background:#fff;border-radius:50%;position:absolute;box-shadow:0 8px 24px rgba(120,170,220,.18)}
+  .c1{top:9%;left:-160px;animation-duration:46s}
+  .c2{top:26%;left:-220px;animation-duration:64s;transform:scale(.7);opacity:.65}
+  .c3{top:56%;left:-140px;animation-duration:80s;transform:scale(.5);opacity:.5}
+  @keyframes drift{to{transform:translateX(120vw)}}
+  /* 云由几个圆拼成 */
+  .c1 .puff:nth-child(1){width:90px;height:90px;left:0;top:0}
+  .c1 .puff:nth-child(2){width:120px;height:120px;left:55px;top:-30px}
+  .c1 .puff:nth-child(3){width:80px;height:80px;left:150px;top:6px}
+  .c2 .puff:nth-child(1){width:90px;height:90px;left:0;top:0}
+  .c2 .puff:nth-child(2){width:120px;height:120px;left:55px;top:-30px}
+  .c2 .puff:nth-child(3){width:80px;height:80px;left:150px;top:6px}
+  .c3 .puff:nth-child(1){width:90px;height:90px;left:0;top:0}
+  .c3 .puff:nth-child(2){width:120px;height:120px;left:55px;top:-30px}
+  .c3 .puff:nth-child(3){width:80px;height:80px;left:150px;top:6px}
+
+  /* ========== 两侧上升的气球（背景装饰） ========== */
+  .balloon{position:fixed;bottom:-140px;z-index:1;pointer-events:none;animation:rise linear infinite;opacity:.8}
+  .balloon .body{width:56px;height:70px;border-radius:50% 50% 48% 48%;position:relative}
+  .balloon .body::after{content:"";position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+    border:6px solid transparent;border-top-color:inherit}
+  .balloon .string{width:2px;height:60px;background:rgba(255,255,255,.75);margin:6px auto 0;border-radius:2px}
+  .b1{left:5%;animation-duration:15s;animation-delay:0s}
+  .b2{left:14%;animation-duration:19s;animation-delay:5s}
+  .b3{right:6%;animation-duration:17s;animation-delay:2s}
+  .b4{right:15%;animation-duration:21s;animation-delay:8s}
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(-4deg)}
+    50%{transform:translateY(-60vh) rotate(4deg)}
+    100%{transform:translateY(-125vh) rotate(-4deg)}
+  }
+
+  /* ========== 主内容 ========== */
+  main{
+    position:relative;z-index:10;width:100%;max-width:520px;
+    padding:26px 22px 60px;display:flex;flex-direction:column;align-items:center;
+  }
+
+  /* 日期徽章 */
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.75);backdrop-filter:blur(8px);
+    border:1.5px solid rgba(255,255,255,.9);
+    padding:8px 20px;border-radius:999px;
+    font-size:13px;font-weight:700;letter-spacing:2px;color:#c47b1e;
+    box-shadow:0 6px 18px rgba(120,150,200,.18);
+    animation:fadeUp .8s .1s backwards;
+  }
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:blink 1.6s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+  /* 大标题：逐字弹入，可自动换行防溢出 */
+  .title{
+    margin-top:26px;text-align:center;
+    display:flex;flex-wrap:wrap;justify-content:center;gap:0 2px;
+    font-size:clamp(30px,8.5vw,52px);font-weight:900;letter-spacing:4px;line-height:1.15;
+    background:linear-gradient(120deg,var(--orange) 10%,var(--pink) 45%,var(--blue) 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 6px 12px rgba(255,159,67,.30));
+    padding:0 4px;
+  }
+  .title span{display:inline-block;animation:popIn .7s cubic-bezier(.2,1.6,.4,1) backwards}
+  @keyframes popIn{
+    from{opacity:0;transform:translateY(30px) scale(.3) rotate(-12deg)}
+    to{opacity:1;transform:none}
+  }
+  .subtitle{
+    margin-top:10px;font-size:11px;letter-spacing:3px;color:#7d94b8;font-weight:600;
+    white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+    animation:fadeUp .8s .9s backwards;
+  }
+
+  /* ========== CSS 手绘小蛋糕（火苗会摇曳） ========== */
+  .cake{position:relative;width:150px;height:130px;margin:34px 0 8px;animation:fadeUp .9s 1.05s backwards}
+  .cake{filter:drop-shadow(0 14px 18px rgba(120,90,40,.18))}
+  .candle{position:absolute;bottom:88px;left:50%;transform:translateX(-50%);width:10px;height:34px;
+    background:repeating-linear-gradient(45deg,#fff 0 6px,var(--pink) 6px 12px);border-radius:4px}
+  .flame{position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+    width:14px;height:20px;background:radial-gradient(circle at 50% 70%,#fff3b0,#ffb02e 65%,#ff7b24);
+    border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    box-shadow:0 0 16px 4px rgba(255,176,46,.65);
+    transform-origin:50% 100%;animation:flicker .5s ease-in-out infinite alternate}
+  @keyframes flicker{
+    from{transform:translateX(-50%) rotate(-6deg) scale(1)}
+    to{transform:translateX(-50%) rotate(7deg) scale(.92)}
+  }
+  .layer{position:absolute;left:50%;transform:translateX(-50%);border-radius:14px}
+  .layer.top{bottom:60px;width:110px;height:34px;background:#ffe6f0;overflow:hidden}
+  .layer.top::before{content:"";position:absolute;top:-7px;left:0;width:100%;height:14px;
+    background:radial-gradient(circle at 10px 0,#ffe6f0 9px,transparent 10px) repeat-x;
+    background-size:22px 14px} /* 淋面滴落效果 */
+  .layer.mid{bottom:34px;width:130px;height:30px;background:#ffd0a8}
+  .layer.base{bottom:8px;width:150px;height:30px;background:#ffc38a}
+  .plate{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+    width:170px;height:14px;border-radius:50%;background:rgba(255,255,255,.9);
+    box-shadow:0 4px 10px rgba(120,120,160,.18)}
+
+  /* ========== 祝福卡片（毛玻璃） ========== */
+  .card{
+    width:100%;margin-top:26px;
+    background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1.5px solid rgba(255,255,255,.95);border-radius:var(--radius);
+    box-shadow:0 18px 44px rgba(90,120,180,.16);
+    padding:34px 26px 30px;position:relative;
+  }
+  .card::before{ /* 左上角小皇冠贴纸 */
+    content:"👑";position:absolute;top:-18px;left:22px;font-size:30px;
+    transform:rotate(-12deg);filter:drop-shadow(0 4px 6px rgba(0,0,0,.12));
+    animation:crownFloat 3s ease-in-out infinite;
+  }
+  @keyframes crownFloat{0%,100%{transform:rotate(-12deg) translateY(0)}50%{transform:rotate(-6deg) translateY(-5px)}}
+  .card p{font-size:17px;line-height:2.1;letter-spacing:1px;animation:fadeUp .8s backwards}
+  .card p:nth-child(1){animation-delay:1.2s;font-weight:700;font-size:18px}
+  .card p:nth-child(2){animation-delay:1.4s;font-weight:800;color:#e2731f;font-size:19px}
+  .card p:nth-child(3){animation-delay:1.6s}
+  .card p:nth-child(4){animation-delay:1.8s;color:#6f5b3e}
+  .card p:nth-child(5){animation-delay:2s;font-weight:700}
+  .card .hl{background:linear-gradient(transparent 62%,#ffe08a 62%)} /* 荧光笔划重点 */
+  .card p .em{font-style:normal;animation:wobble 2.4s ease-in-out infinite;display:inline-block}
+  @keyframes wobble{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg) scale(1.12)}}
+
+  /* ========== 倒计时卡片 ========== */
+  .countdown{
+    width:100%;margin-top:20px;text-align:center;
+    background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,244,214,.85));
+    backdrop-filter:blur(10px);
+    border:1.5px solid rgba(255,255,255,.95);border-radius:var(--radius);
+    box-shadow:0 14px 34px rgba(90,120,180,.15);
+    padding:22px 20px;animation:fadeUp .8s 2.2s backwards;
+  }
+  .countdown .label{font-size:11px;letter-spacing:4px;color:#b08b4f;font-weight:700}
+  .countdown .num{
+    font-size:56px;font-weight:900;line-height:1.2;margin:6px 0 2px;
+    background:linear-gradient(120deg,var(--orange),var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:breath 2.6s ease-in-out infinite;
+  }
+  @keyframes breath{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .countdown .unit{font-size:14px;color:#8a7454;letter-spacing:2px}
+  .countdown .party{font-size:20px;font-weight:800;color:#e2731f}
+
+  /* ========== 再放彩带按钮 ========== */
+  .btn{
+    margin-top:26px;cursor:pointer;border:none;outline:none;
+    font-family:inherit;font-size:16px;font-weight:800;letter-spacing:2px;color:#fff;
+    background:linear-gradient(120deg,var(--orange),#ffb84d);
+    padding:15px 44px;border-radius:999px;
+    box-shadow:0 10px 24px rgba(255,159,67,.42),inset 0 -3px 0 rgba(0,0,0,.08);
+    transition:transform .15s ease,box-shadow .15s ease;
+    animation:fadeUp .8s 2.4s backwards;
+  }
+  .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 32px rgba(255,159,67,.5)}
+  .btn:active{transform:scale(.94)}
+  .hint{margin-top:12px;font-size:12px;color:#93a5c2;letter-spacing:2px;animation:fadeUp .8s 2.6s backwards}
+
+  /* ========== 落款 ========== */
+  .footer{margin-top:38px;text-align:center;animation:fadeUp .8s 2.8s backwards}
+  .footer .en{font-size:11px;letter-spacing:4px;color:#a8b6cf;text-transform:uppercase}
+  .footer .name{margin-top:8px;font-size:17px;font-weight:800;color:#6b5335;letter-spacing:3px}
+  .footer .name b{color:var(--pink)}
+
+  /* ========== 点击屏幕冒出的爱心星星 ========== */
+  .love{position:fixed;z-index:99;pointer-events:none;font-size:22px;
+    animation:loveUp 1.15s ease-out forwards;translate:-50% -50%}
+  @keyframes loveUp{
+    0%{opacity:0;transform:translateY(0) scale(.4) rotate(0)}
+    18%{opacity:1}
+    100%{opacity:0;transform:translateY(-110px) scale(1.25) rotate(22deg)}
+  }
+
+  /* 彩带画布：铺满全屏、不挡点击 */
+  #confetti{position:fixed;inset:0;z-index:50;pointer-events:none}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+  /* 尊重系统"减少动态效果"设置 */
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+  }
+</style>
+</head>
+<body>
+
+  <!-- 顶部斜贴纸横幅 -->
+  <div class="tape">
+    <div class="tape-track" id="tape"></div>
+  </div>
+
+  <!-- 背景：太阳 / 云 / 气球 -->
+  <div class="sun"></div>
+  <div class="cloud c1"><div class="puff"></div><div class="puff"></div><div class="puff"></div></div>
+  <div class="cloud c2"><div class="puff"></div><div class="puff"></div><div class="puff"></div></div>
+  <div class="cloud c3"><div class="puff"></div><div class="puff"></div><div class="puff"></div></div>
+  <div class="balloon b1"><div class="body" style="background:#ff9f9f;border-top-color:#ff9f9f"></div><div class="string"></div></div>
+  <div class="balloon b2"><div class="body" style="background:#8fd0ff;border-top-color:#8fd0ff"></div><div class="string"></div></div>
+  <div class="balloon b3"><div class="body" style="background:#ffd66e;border-top-color:#ffd66e"></div><div class="string"></div></div>
+  <div class="balloon b4"><div class="body" style="background:#b8e6a3;border-top-color:#b8e6a3"></div><div class="string"></div></div>
+
+  <main>
+    <!-- 日期徽章 -->
+    <div class="badge"><span class="dot"></span>EST. 2007.12.02 · 19TH<span class="dot"></span></div>
+
+    <!-- 大标题：JS 会把每个字包进 span 做逐字弹入 -->
+    <h1 class="title" id="title">祝你生日快乐</h1>
+    <div class="subtitle">HAPPY BIRTHDAY TO DONG JIALE</div>
+
+    <!-- CSS 手绘蛋糕 -->
+    <div class="cake">
+      <div class="candle"><div class="flame"></div></div>
+      <div class="layer top"></div>
+      <div class="layer mid"></div>
+      <div class="layer base"></div>
+      <div class="plate"></div>
+    </div>
+
+    <!-- 祝福卡片 -->
+    <div class="card">
+      <p>亲爱的董佳乐同学：</p>
+      <p><span class="em">👑</span> 19 岁生日快乐！</p>
+      <p>祝你<span class="hl">天天开心</span> <span class="hl">永远前行</span></p>
+      <p>世界如此辽阔 请不要走进悲伤的角落</p>
+      <p>愿岁岁平安 幸福常在 <span class="em">🥳</span></p>
+    </div>
+
+    <!-- 生日倒计时（JS 自动计算） -->
+    <div class="countdown" id="countdown">
+      <div class="label">COUNTDOWN · 生日倒计时</div>
+    </div>
+
+    <button class="btn" id="partyBtn">🎉 再庆祝一次</button>
+    <div class="hint">点击屏幕任意位置有小惊喜哦</div>
+
+    <div class="footer">
+      <div class="en">With Sunshine &amp;amp; Best Wishes</div>
+      <div class="name">—— 你的朋友 · <b>胡博杨</b></div>
+    </div>
+  </main>
+
+  <canvas id="confetti"></canvas>
+
+<script>
+/* ═════════ 1. 标题逐字弹入 ═════════ */
+(function(){
+  const t = document.getElementById('title');
+  const chars = t.textContent.split('');
+  t.textContent = '';
+  chars.forEach((ch,i)=>{
+    const s = document.createElement('span');
+    s.textContent = ch;
+    s.style.animationDelay = (0.15 + i*0.12) + 's';
+    t.appendChild(s);
+  });
+})();
+
+/* ═════════ 2. 顶部横幅文字（复制两份实现无缝滚动） ═════════ */
+(function(){
+  const text = 'HAPPY 19TH BIRTHDAY ✦ TO 董佳乐 ✦ EST.2007.12.02 ✦ WITH LOVE FROM 胡博杨 ✦ ';
+  document.getElementById('tape').textContent = text.repeat(4);
+})();
+
+/* ═════════ 3. 生日倒计时（生日当天会变彩蛋文案） ═════════ */
+(function(){
+  const box = document.getElementById('countdown');
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let target = new Date(now.getFullYear(), 11, 2);          // 12 月 2 日生日
+  if (target < today) target = new Date(now.getFullYear()+1, 11, 2);
+  const days = Math.round((target - today) / 86400000);
+  if (days === 0){
+    box.innerHTML = '<div class="label">TODAY · 今天</div>' +
+      '<div class="party">🎂 今天是他的生日！
+19 岁生日快乐 🎉</div>';
+  }else{
+    box.innerHTML += '<div class="num">' + days + '</div>' +
+      '<div class="unit">天 后相聚为他庆祝 🎈</div>';
+  }
+})();
+
+/* ═════════ 4. 彩带纸屑（Canvas 粒子） ═════════ */
+const cvs = document.getElementById('confetti');
+const ctx = cvs.getContext('2d');
+let W, H;
+function resize(){ W = cvs.width = innerWidth; H = cvs.height = innerHeight; }
+addEventListener('resize', resize); resize();
+
+const COLORS = ['#ff9f43','#ffd94a','#3f9df0','#ff7ea8','#7ed6a5','#ffffff'];
+let pieces = [];
+
+function burst(x, y, n){         /* 一波爆开的彩带 */
+  for(let i=0;i<n;i++){
+    pieces.push({
+      x:x, y:y,
+      vx:(Math.random()-0.5)*15,
+      vy:Math.random()*-13-5,
+      size:Math.random()*8+5,
+      color:COLORS[(Math.random()*COLORS.length)|0],
+      rot:Math.random()*Math.PI*2, vr:(Math.random()-0.5)*0.35,
+      shape:Math.random()<0.5?'rect':'circle',
+      life:1, decay:0.007+Math.random()*0.008,
+      wobble:Math.random()*Math.PI*2, g:0.25
+    });
+  }
+}
+function gentleFall(){           /* 顶部慢慢飘下来的小彩带 */
+  if(pieces.length>260) return;
+  pieces.push({
+    x:Math.random()*W, y:-12,
+    vx:(Math.random()-0.5)*1.2, vy:1+Math.random()*1.8,
+    size:Math.random()*7+4,
+    color:COLORS[(Math.random()*COLORS.length)|0],
+    rot:Math.random()*Math.PI*2, vr:(Math.random()-0.5)*0.12,
+    shape:Math.random()<0.5?'rect':'circle',
+    life:1, decay:0.0028, wobble:Math.random()*Math.PI*2, g:0.012
+  });
+}
+(function tick(){
+  ctx.clearRect(0,0,W,H);
+  for(const p of pieces){
+    p.vy += p.g;
+    p.wobble += 0.08;
+    p.x += p.vx + Math.sin(p.wobble)*0.8;
+    p.y += p.vy;
+    p.rot += p.vr;
+    p.life -= p.decay;
+    ctx.save();
+    ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    ctx.globalAlpha = Math.max(p.life,0);
+    ctx.fillStyle = p.color;
+    if(p.shape==='rect'){ ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2); }
+    else{ ctx.beginPath(); ctx.arc(0,0,p.size/2,0,7); ctx.fill(); }
+    ctx.restore();
+  }
+  pieces = pieces.filter(p=>p.life>0 &amp;&amp; p.y<H+60);
+  requestAnimationFrame(tick);
+})();
+
+/* 进场：两波大彩带 */
+setTimeout(()=>burst(W*0.5, H*0.35, 90), 700);
+setTimeout(()=>{ burst(W*0.18, H*0.3, 55); burst(W*0.82, H*0.3, 55); }, 1500);
+/* 之后每隔一会儿补一点缓缓飘落的 */
+setInterval(()=>{ if(Math.random()<0.55) gentleFall(); }, 380);
+
+/* 按钮再放三连发 */
+document.getElementById('partyBtn').addEventListener('click', ()=>{
+  burst(W*0.2,H*0.35,60); burst(W*0.5,H*0.25,80); burst(W*0.8,H*0.35,60);
+});
+
+/* ═════════ 5. 点击屏幕冒出爱心 / 星星 ═════════ */
+const LOVES = ['💗','✨','🌟','💛','🎈','⭐️'];
+document.addEventListener('click', e=>{
+  for(let i=0;i<3;i++){
+    const el = document.createElement('div');
+    el.className = 'love';
+    el.textContent = LOVES[(Math.random()*LOVES.length)|0];
+    el.style.left = (e.clientX + (Math.random()-0.5)*36) + 'px';
+    el.style.top  = (e.clientY + (Math.random()-0.5)*20) + 'px';
+    el.style.fontSize = (16 + Math.random()*14) + 'px';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 1200);
+  }
+});
+
+/* 调试小开关：网址后面加 #noanim 可跳过动画直接看最终版面 */
+if (location.hash === '#noanim'){
+  const st = document.createElement('style');
+  st.textContent = '*{animation:none!important;transition:none!important}';
+  document.head.appendChild(st);
+}
+</script>
+</body>
+</html>
